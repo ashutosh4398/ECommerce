@@ -13,7 +13,9 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 # for customizing JWT expiry time
 from datetime import timedelta
-from dotenv import dotenv_values
+from dotenv import dotenv_values, load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -153,8 +155,11 @@ REST_FRAMEWORK = {
 
 # SIMPLE JWT CUSTOMIZATION
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1)
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=10),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=10),
 }
 
-[merchant_id, public_key, private_key] = dotenv_values('.env').values()
+
+MERCHANT_ID = os.environ.get('merchant_id')
+PUBLIC_KEY = os.environ.get('public_key') 
+PRIVATE_KEY = os.environ.get('private_key')

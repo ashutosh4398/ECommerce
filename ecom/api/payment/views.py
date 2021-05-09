@@ -4,61 +4,50 @@ from django.contrib.auth import get_user_model
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 import braintree
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 # Create your views here.
 
 gateway = braintree.BraintreeGateway(
-  braintree.Configuration(
-    environment=braintree.Environment.Sandbox,
-    merchant_id=settings.merchant_id,
-    public_key=settings.public_key,
-    private_key=settings.private_key,
-  )
-)
+            braintree.Configuration(
+                environment=braintree.Environment.Sandbox,
+                merchant_id=settings.MERCHANT_ID,
+                public_key=settings.PUBLIC_KEY,
+                private_key=settings.PRIVATE_KEY,
+            )
+        )
 
-def validate_user_session(id,token):
-    UserModel = get_user_model()
-    try:
-        user = UserModel.objects.get(pk=id)
-        if user.session_token == token:
-            return True
-        return False
-    except UserModel.DoesNotExist:
-        return False
-
-
-@csrf_exempt
-def generate_token(request,id,token):
-    if not validate_user_session(id,token):
-        return JsonResponse({"error": "Invalid session"})
+class GenerateToken(APIView):
     
-    return JsonResponse({
-        "clientToken": gateway.client_token.generate(),
-        "success": True
-    })
+    def get(self,request):
+        return Response({
+            "clientToken": gateway.client_token.generate(),
+            "success": True
+        })
 
-@csrf_exempt
-def process_payment(request,id,token):
-    if not validate_user_session(id,token):
-        return JsonResponse({"error": "Invalid session"})
-    
-    nonce_from_the_client = request.POST.get("payment_method_nonce")
-    amount_from_the_client = request.POST.get("amount")
 
-    result = gateway.transaction.sale({
-        "amount": amount_from_the_client,
-        "payment_method_nonce": nonce_from_the_client,
-        "options": {
-        "submit_for_settlement": True
-        }
-    })
-
-    if result.is_success:
-        return JsonResponse({
-            "success": result.is_success,
-            "transaction": {
-                "id": result.transaction.id,
-                "amount": result.transaction.amount
+class ProcessPayment(APIView):
+    def post(self,request):
+        nonce_from_the_client = request.POST.get("payment_method_nonce")
+        amount_from_the_client = request.POST.get("amount")
+        print(nonce_from_the_client)
+        print(amount_from_the_client)
+        result = gateway.transaction.sale({
+            "amount": amount_from_the_client,
+            "payment_method_nonce": nonce_from_the_client,
+            "options": {
+                "submit_for_settlement": True
             }
         })
-    
-    return JsonResponse({"error": True, })
+
+        if result.is_success:
+            return Response({
+                "success": result.is_success,
+                "transaction": {
+                    "id": result.transaction.id,
+                    "amount": result.transaction.amount
+                }
+            })
+        
+        return Response({"error": True, })

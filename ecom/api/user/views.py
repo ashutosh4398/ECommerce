@@ -19,8 +19,8 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    permission_classes_by_action = {"create": [AllowAny]}
+    permission_classes = [AllowAny]
     queryset = CustomUser.objects.all().order_by('id')
     serializer_class = UserSerializer
-
+    http_method_names = ['post','put']
 
