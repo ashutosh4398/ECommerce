@@ -48,7 +48,7 @@ const PaymentB = ({
                     info.clientToken !== null && products.length > 0 ?
                     (
                         <div className="">
-                            <h3>Your bill is: {total_amount}</h3>
+                            <h3>Your bill is: ${total_amount}</h3>
                             <DropIn 
                                 options={{
                                     authorization: info.clientToken,

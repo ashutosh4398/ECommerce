@@ -28,6 +28,7 @@ axiosInstance.interceptors.response.use(resp => resp, error => {
     if (error.response.data?.code === "token_not_valid" && !originalRequest._retry) {
         // NOTE: 401 indicates ACCESS_TOKEN_EXPIRED
         // now we have to fire API for token refresh
+        console.log("TOKEN REFRESH REQUIRED")
         originalRequest._retry = true;
         return handleRefreshQueue()
             .then(resp => {
