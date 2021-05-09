@@ -1,6 +1,6 @@
 ## Project explaination and demo
-<iframe width="560" height="315" src="https://www.youtube.com/embed/TJz_kpey5Qg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
+<!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/TJz_kpey5Qg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
+<video src="https://www.youtube.com/embed/TJz_kpey5Qg"></video>
 ## How to install and run the project
 **STEPS**
 1. Clone the project on local repo
